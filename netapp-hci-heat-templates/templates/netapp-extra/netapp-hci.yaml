@@ -1,0 +1,36 @@
+## A Heat environment file which can be used to set up storage
+## backends.
+
+resource_registry:
+  OS::TripleO::ControllerExtraConfigPre: /home/stack/templates/netapp-extra/netapp-allcontrollers-pre.yaml
+
+parameter_defaults:
+  Debug: True
+  #### BACKEND SELECTION ####
+  ## Whether to enable iscsi backend for Cinder.
+  CinderEnableIscsiBackend: false
+  ## Whether to enable rbd (Ceph) backend for Cinder.
+  CinderEnableRbdBackend: false
+  ## Whether to enable NFS backend for Cinder.
+  # CinderEnableNfsBackend: false
+  ## Whether to enable rbd (Ceph) backend for Nova ephemeral storage.
+  NovaEnableRbdBackend: false
+  SwiftMountCheck: true
+  SwiftRawDisks: {"sdc":{}}
+  SwiftUseLocalDir: false
+  SolidFireSVIP: 192.168.202.150
+  SwiftSolidFireLuns: 1
+   ## Enables SolidFire backend
+  ExtraConfig:
+      cinder::config::cinder_config:
+          solidfire/volume_driver:
+              value: cinder.volume.drivers.solidfire.SolidFireDriver
+          solidfire/san_ip:
+              value: 172.21.230.150
+          solidfire/san_login:
+              value: admin
+          solidfire/san_password:
+              value: NetApp123
+          solidfire/sf_svip:
+              value: 192.168.202.150:3260
+      cinder_user_enabled_backends: ['solidfire']

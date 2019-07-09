@@ -1,0 +1,52 @@
+#This file is an example of an environment file for defining the isolated
+#networks and related parameters.
+resource_registry:
+  # Network Interface templates to use (these files must exist). You can
+  # override these by including one of the net-*.yaml environment files,
+  # such as net-bond-with-vlans.yaml, or modifying the list here.
+  # Port assignments for the Controller
+  OS::TripleO::Controller::Net::SoftwareConfig: /home/stack/templates/controller.yaml
+  # Port assignments for the Compute
+  OS::TripleO::Compute::Net::SoftwareConfig: /home/stack/templates/compute.yaml
+
+parameter_defaults:
+  # This section is where deployment-specific configuration is done
+  # CIDR subnet mask length for provisioning network
+  ControlPlaneSubnetCidr: '24'
+  # Gateway router for the provisioning network (or Undercloud IP)
+  ControlPlaneDefaultRoute: 192.168.24.1
+  EC2MetadataIp: 192.168.24.1  # Generally the IP of the Undercloud
+  # Customize the IP subnets to match the local environment
+  StorageNetCidr: '192.168.202.0/24'
+  StorageMgmtNetCidr: '192.168.33.0/24'
+  InternalApiNetCidr: '192.168.31.0/24'
+  TenantNetCidr: '192.168.32.0/24'
+  ExternalNetCidr: '172.21.229.0/24'
+  ElementManagementNetCidr: '172.21.230.0/24'
+  # Customize the VLAN IDs to match the local environment
+  StorageNetworkVlanID: 202
+  StorageMgmtNetworkVlanID: 303
+  InternalApiNetworkVlanID: 301
+  TenantNetworkVlanID: 302
+  ExternalNetworkVlanID: 3485
+  ElementManagementNetworkVlanID: 3486
+  StorageAllocationPools: [{'start': '192.168.202.101', 'end': '192.168.202.130'}]
+  StorageMgmtAllocationPools: [{'start': '192.168.33.101', 'end': '192.168.33.130'}]
+  InternalApiAllocationPools: [{'start': '192.168.31.101', 'end': '192.168.31.130'}]
+  TenantAllocationPools: [{'start': '192.168.32.101', 'end': '192.168.32.130'}]
+  # Leave room if the external network is also used for floating IPs
+  ExternalAllocationPools: [{'start': '172.21.229.20', 'end': '172.21.229.40'}]
+  ElementManagementAllocationPools: [{'start': '172.21.230.20', 'end': '172.21.230.40'}]
+  # Gateway routers for routable networks
+  ExternalInterfaceDefaultRoute: '172.21.229.254'
+  # Define the DNS servers (maximum 2) for the overcloud nodes
+  DnsServers: ["8.8.8.8","8.8.4.4"]
+  # List of Neutron network types for tenant networks (will be used in order)
+  NeutronNetworkType: 'vxlan'
+  # The tunnel type for the tenant network (vxlan or gre). Set to '' to disable tunneling.
+  NeutronTunnelTypes: 'vxlan'
+  # Neutron VLAN ranges per network, for example 'datacentre:1:499,tenant:500:1000':
+  NeutronNetworkVLANRanges: 'datacentre:500:4000'
+  # Customize bonding options, e.g. "mode=4 lacp_rate=1 updelay=1000 miimon=100"
+  # for Linux bonds w/LACP, or "bond_mode=active-backup" for OVS active/backup.
+  BondInterfaceOvsOptions: "bond_mode=balance-slb"
