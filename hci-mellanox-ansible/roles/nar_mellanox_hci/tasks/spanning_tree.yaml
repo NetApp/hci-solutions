@@ -1,8 +1,0 @@
-#Configure spanning tree settings for edge ports
-- name: Configure spanning tree ports 
-  onyx_config:
-    lines:
-    - interface ethernet "{{ item.members | regex_replace('^Eth(.*)$','\\1') }}" spanning-tree port type edge
-  with_items:
-  -  "{{storage_interfaces}}"
-
