@@ -1,0 +1,14 @@
+# Set vlans for the storage ports
+- name: Set vlans for compute ports
+  onyx_l2_interface:
+    name: "{{item[0].members}}"
+    mode: hybrid
+    access_vlan: 2
+    trunk_allowed_vlans: "{{item[1].vlan_id}}"
+  with_nested:
+  -  "{{compute_interfaces}}"
+  -  "{{netapp_hci_vlans}}"
+  when:
+  -  item[1].vlan_name != "native"
+  -  item[1].vlan_name != "IPL"
+

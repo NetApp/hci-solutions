@@ -1,0 +1,9 @@
+---
+- name: Configure Mellanox switches for NDE 2 cable config
+  hosts: mellanox
+  become: yes
+  become_method: enable
+  vars_files:
+    - vars_main.yaml 
+  roles:
+    - { role: nar_mellanox_hci }
