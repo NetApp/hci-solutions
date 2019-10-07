@@ -1,0 +1,9 @@
+resource_registry:
+  OS::TripleO::NodeExtraConfigPost: /home/stack/templates/netapp-extra/netapp-persist-mounts.yaml
+
+parameter_defaults:
+  local_disk: /dev/sdc
+  mount_point: /srv/node/sdc
+  fs_type: xfs
+  fs_options: noatime,nodiratime,nobarrier,logbufs=8,_netdev
+  disk_check: 0 2

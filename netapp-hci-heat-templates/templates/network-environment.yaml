@@ -41,6 +41,8 @@ parameter_defaults:
   ExternalInterfaceDefaultRoute: '172.21.229.254'
   # Define the DNS servers (maximum 2) for the overcloud nodes
   DnsServers: ["8.8.8.8","8.8.4.4"]
+  # Define the NTP server for the overcloud nodes
+  NtpServer: '0.pool.ntp.org'
   # List of Neutron network types for tenant networks (will be used in order)
   NeutronNetworkType: 'vxlan'
   # The tunnel type for the tenant network (vxlan or gre). Set to '' to disable tunneling.

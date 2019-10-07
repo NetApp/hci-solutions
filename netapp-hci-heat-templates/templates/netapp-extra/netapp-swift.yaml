@@ -23,16 +23,13 @@ resources:
              #!/bin/bash
              # Correct the default initiator name
              # so the controller can login into SolidFire LUN
-             #printf "InitiatorName="$(< /sys/firmware/ibft/initiator/initiator-name)"\n" > /etc/iscsi/initiatorname.iscsi
              printf "InitiatorName=iqn.1994-05.com.redhat:$(hostname -s) \n" > /etc/iscsi/initiatorname.iscsi
-             /bin/systemctl reload iscsi.service
-             /bin/systemctl restart iscsid.service
+             touch /etc/iscsi/.initiator_reset
              iscsiadm --mode discovery --type sendtargets --portal=_SFSVIP_
              iscsiadm --mode node --login 
              mkfs.xfs -f /dev/sdc
              mkdir -p /srv/node/sdc
-             echo "/dev/sdc /srv/node/sdc xfs noatime,nodiratime,nobarrier,logbufs=8,_netdev 0 2" >> /etc/fstab  
-             mount /srv/node/sdc
+             mount -t xfs -o noatime,nodiratime,nobarrier,logbufs=8,_netdev /dev/sdc /srv/node/sdc
            params:
              _SFSVIP_: {get_param: SolidFireSVIP}
              _LUNS_: {get_param: SwiftSolidFireLuns}
